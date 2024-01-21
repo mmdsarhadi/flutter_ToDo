@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:todolist/data.g.dart';
 
-void main() {
+void main()async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(TaskAdapter());
   runApp(const MyApp());
 }
 
