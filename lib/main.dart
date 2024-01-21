@@ -7,7 +7,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todolist/data.dart';
 import 'package:todolist/edit.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 const taskBoxName = 'tasks';
+
 
 void main() async {
   await Hive.initFlutter();
@@ -16,7 +18,7 @@ void main() async {
   await Hive.openBox<TaskEntity>(taskBoxName);
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: primaryVariantColor));
-  runApp(const MyApp());
+  runApp(MyApp(locale: 'fa',));
 }
 
 const Color primaryColor = Color(0xff794CFF);
@@ -27,29 +29,44 @@ const lowPriority = Color(0xff3BE1F1);
 const highPriority = primaryColor;
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+  final String locale;
+  MyApp({required this.locale});
   @override
   Widget build(BuildContext context) {
+    TextTheme getPrimaryTextTheme() {
+      if (locale == "en") {
+        return GoogleFonts.poppinsTextTheme(
+          const TextTheme(
+            headline6: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        );
+      } else {
+        return GoogleFonts.poppinsTextTheme(
+          const TextTheme(
+            headline6: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Lalezar'),
+          ),
+        );
+      }
+    }
     const primaryTextColor = Color(0xff1D2830);
     return MaterialApp(
       localizationsDelegates: [
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
-        Locale('en'),
-        Locale('fa'),
-      ],
+
+
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: Locale('en'),
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-          textTheme: GoogleFonts.poppinsTextTheme(const TextTheme(
-              headline6: TextStyle(fontWeight: FontWeight.bold))),
+          textTheme: getPrimaryTextTheme(),
           inputDecorationTheme: const InputDecorationTheme(
               floatingLabelBehavior: FloatingLabelBehavior.never,
-              labelStyle: TextStyle(color: secondaryTextColor),
+              labelStyle: TextStyle(color: secondaryTextColor, ),
               border: InputBorder.none,
               iconColor: secondaryTextColor),
           colorScheme: const ColorScheme.light(
@@ -64,6 +81,13 @@ class MyApp extends StatelessWidget {
       home: HomeScreen(),
     );
   }
+  TextTheme get  enPrimaryTextThem => GoogleFonts.poppinsTextTheme(const TextTheme(
+      headline6: TextStyle(fontWeight: FontWeight.bold)));
+
+  TextTheme get  faPrimaryTextThem => GoogleFonts.poppinsTextTheme(const TextTheme(
+      headline6: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Lalezar')));
+
+
 }
 
 class HomeScreen extends StatelessWidget {
@@ -73,6 +97,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final box = Hive.box<TaskEntity>(taskBoxName);
     final themeData = Theme.of(context);
     return Scaffold(
@@ -86,7 +111,7 @@ class HomeScreen extends StatelessWidget {
                     )));
           },
           label: Row(
-            children: const [Text('Add New Task'), Icon(CupertinoIcons.add)],
+            children: [Text(AppLocalizations.of(context)!.add), Icon(CupertinoIcons.add)],
           )),
       body: SafeArea(
         child: Column(
@@ -106,7 +131,7 @@ class HomeScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'To Do List',
+                          AppLocalizations.of(context)!.list,
                           style: themeData.textTheme.headline6!
                               .apply(color: themeData.colorScheme.onPrimary,)
 
@@ -134,9 +159,9 @@ class HomeScreen extends StatelessWidget {
                           searchKeywordNotifier.value = controller.text;
                         },
                         controller: controller,
-                        decoration: const InputDecoration(
+                        decoration:  InputDecoration(
                           prefixIcon: Icon(CupertinoIcons.search),
-                          label: Text('Search tasks...'),
+                          label: Text(AppLocalizations.of(context)!.search),
                         ),
                       ),
                     ),
@@ -175,7 +200,7 @@ class HomeScreen extends StatelessWidget {
                                       CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Today',
+                                          AppLocalizations.of(context)!.today,
                                           style: themeData.textTheme.headline6!
                                               .apply(fontSizeFactor: 0.9),
                                         ),
@@ -198,8 +223,8 @@ class HomeScreen extends StatelessWidget {
                                         box.clear();
                                       },
                                       child: Row(
-                                        children: const [
-                                          Text('Delete All'),
+                                        children:  [
+                                          Text(AppLocalizations.of(context)!.delete),
                                           SizedBox(
                                             width: 4,
                                           ),
@@ -237,6 +262,7 @@ class EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var localizations;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -247,7 +273,7 @@ class EmptyState extends StatelessWidget {
         const SizedBox(
           height: 12,
         ),
-        const Text('Your task list is empty'),
+        Text(AppLocalizations.of(context)!.add),
       ],
     );
   }
