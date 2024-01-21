@@ -6,8 +6,6 @@ part of 'data.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-import 'package:hive_flutter/adapters.dart';
-
 class TaskAdapter extends TypeAdapter<TaskEntity> {
   @override
   final int typeId = 0;
@@ -42,12 +40,9 @@ class TaskAdapter extends TypeAdapter<TaskEntity> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TaskAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
-class TaskEntity {
+          other is TaskAdapter &&
+              runtimeType == other.runtimeType &&
+              typeId == other.typeId;
 }
 
 class PriorityAdapter extends TypeAdapter<Priority> {
@@ -89,7 +84,7 @@ class PriorityAdapter extends TypeAdapter<Priority> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PriorityAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+          other is PriorityAdapter &&
+              runtimeType == other.runtimeType &&
+              typeId == other.typeId;
 }

@@ -1,0 +1,15 @@
+{
+    "list": "To Do List",
+    "search": "Search tasks...",
+    "today": "Today",
+    "delete": "Delete All",
+    "your": "Your task list is empty",
+    "add": "Add New Task",
+    "edit": "Edit Task",
+    "save": "Save Changes",
+    "high": "High",
+    "low": "Low",
+    "normal": "Normal",
+    "add": "Add a task for today..."
+
+}
