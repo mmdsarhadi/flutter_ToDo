@@ -1,7 +1,7 @@
 # TO DO
 
 
-<p>Welcome to my To DO!</p>
+<p>Welcome!</p>
 <p>"To Do" is a simple and efficient program that helps you easily manage your daily tasks. With this program, you can easily record your tasks, check them off, and prioritize them.</p>
 
 <h2>Screenshots</h2>
