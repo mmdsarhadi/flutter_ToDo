@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:todolist/data.dart';
 import 'package:todolist/edit.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
-const taskBoxName = 'tasks';
+import 'package:url_launcher/url_launcher.dart';
 
+const taskBoxName = 'tasks';
+final Uri _url = Uri.parse('https://flutter.dev');
 
 void main() async {
   await Hive.initFlutter();
@@ -18,7 +21,9 @@ void main() async {
   await Hive.openBox<TaskEntity>(taskBoxName);
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: primaryVariantColor));
-  runApp(MyApp(locale: 'fa',));
+  runApp(MyApp(
+    locale: 'fa',
+  ));
 }
 
 const Color primaryColor = Color(0xff794CFF);
@@ -30,7 +35,9 @@ const highPriority = primaryColor;
 
 class MyApp extends StatelessWidget {
   final String locale;
+
   MyApp({required this.locale});
+
   @override
   Widget build(BuildContext context) {
     TextTheme getPrimaryTextTheme() {
@@ -43,11 +50,13 @@ class MyApp extends StatelessWidget {
       } else {
         return GoogleFonts.poppinsTextTheme(
           const TextTheme(
-            headline6: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Lalezar'),
+            headline6:
+                TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Lalezar'),
           ),
         );
       }
     }
+
     const primaryTextColor = Color(0xff1D2830);
     return MaterialApp(
       localizationsDelegates: [
@@ -56,19 +65,17 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-
-
       supportedLocales: AppLocalizations.supportedLocales,
       locale: Locale('en'),
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme:
-      ThemeData(
-
+      theme: ThemeData(
           textTheme: getPrimaryTextTheme(),
           inputDecorationTheme: const InputDecorationTheme(
               floatingLabelBehavior: FloatingLabelBehavior.never,
-              labelStyle: TextStyle(color: secondaryTextColor, ),
+              labelStyle: TextStyle(
+                color: secondaryTextColor,
+              ),
               border: InputBorder.none,
               iconColor: secondaryTextColor),
           colorScheme: const ColorScheme.light(
@@ -83,18 +90,15 @@ class MyApp extends StatelessWidget {
       home: HomeScreen(),
     );
   }
-  TextTheme get  enPrimaryTextThem => GoogleFonts.poppinsTextTheme(const TextTheme(
-      headline6: TextStyle(fontWeight: FontWeight.bold)));
 
-  TextTheme get  faPrimaryTextThem => GoogleFonts.poppinsTextTheme(const TextTheme(
-      headline6: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Lalezar')));
+  TextTheme get enPrimaryTextThem => GoogleFonts.poppinsTextTheme(
+      const TextTheme(headline6: TextStyle(fontWeight: FontWeight.bold)));
 
-
+  TextTheme get faPrimaryTextThem =>
+      GoogleFonts.poppinsTextTheme(const TextTheme(
+          headline6:
+              TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Lalezar')));
 }
-
-
-
-
 
 class MyAppThemeConfig {
   static const String faPrimaryFontFamily = 'IranYekan';
@@ -124,11 +128,9 @@ class MyAppThemeConfig {
 
   ThemeData getTheme(String languageCode) {
     return ThemeData(
-
       primarySwatch: Colors.pink,
       primaryColor: primaryColor,
       brightness: brightness,
-
       dividerColor: surfaceColor,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
@@ -153,35 +155,22 @@ class MyAppThemeConfig {
   }
 
   TextTheme get enPrimaryTextTheme => GoogleFonts.latoTextTheme(TextTheme(
-    bodyText2: TextStyle(fontSize: 15, color: primaryTextColor),
-    bodyText1: TextStyle(fontSize: 13, color: secondaryTextColor),
-    headline6:
-    TextStyle(fontWeight: FontWeight.bold, color: primaryTextColor),
-    subtitle1: TextStyle(
-        fontSize: 16, fontWeight: FontWeight.bold, color: primaryTextColor),
-  ));
+        bodyText2: TextStyle(fontSize: 15, color: primaryTextColor),
+        bodyText1: TextStyle(fontSize: 13, color: secondaryTextColor),
+        headline6:
+            TextStyle(fontWeight: FontWeight.bold, color: primaryTextColor),
+        subtitle1: TextStyle(
+            fontSize: 16, fontWeight: FontWeight.bold, color: primaryTextColor),
+      ));
 
   TextTheme get faPrimaryTextTheme => TextTheme(
-
       headline6: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
           color: primaryTextColor,
           fontFamily: faPrimaryFontFamily),
-
-      button: TextStyle(fontFamily: faPrimaryFontFamily)
-
-  );
+      button: TextStyle(fontFamily: faPrimaryFontFamily));
 }
-
-
-
-
-
-
-
-
-
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -190,21 +179,132 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final box = Hive.box<TaskEntity>(taskBoxName);
     final themeData = Theme.of(context);
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                Color(0xff5C0AFF),
+                Color(0xff794CFF),
+              ])),
+              accountName: Text(
+                "Mmd Sarhadi",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              accountEmail: Text(
+                "81msra@gmail.com",
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                CupertinoIcons.star,
+              ),
+              title: Text(
+                'Rate the app',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Lalezar',
+                  fontWeight: FontWeight.w100,
+                ),
+              ),
+              onTap: () {
+                launch(
+                    'https://developer.myket.ir/fa/application/com.todolist.software/');
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.android,
+              ),
+              title: const Text('Other programs',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Lalezar',
+                    fontWeight: FontWeight.w100,
+                  )),
+              onTap: () {
+                launch('https://myket.ir/developer/dev-86611');
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.open_in_new,
+              ),
+              title: const Text('Open the application page in Myket',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Lalezar',
+                    fontWeight: FontWeight.w100,
+                  )),
+              onTap: () {
+                launch(
+                    'https://developer.myket.ir/fa/application/com.todolist.software/');
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                CupertinoIcons.star,
+              ),
+              title: Text(
+                'Rate the app',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Lalezar',
+                  fontWeight: FontWeight.w100,
+                ),
+              ),
+              onTap: () async {
+
+                
+                final url = 'https://developer.myket.ir/fa/application/com.todolist.software/';
+                try {
+                  // Copy text to clipboard
+                  await Clipboard.setData(ClipboardData(text: url));
+
+                  // Open the share menu
+                  Share.share('url');
+                } catch (e) {
+                  print('Error sharing: $e');
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+      appBar: AppBar(
+        backgroundColor: Color(0xff5C0AFF),
+        flexibleSpace: Container(
+            height: 110,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+              themeData.colorScheme.primary,
+              themeData.colorScheme.primaryContainer,
+            ]))),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    EditTaskScreen(
+                builder: (context) => EditTaskScreen(
                       task: TaskEntity(),
                     )));
           },
           label: Row(
-            children: [Text(AppLocalizations.of(context)!.add), Icon(CupertinoIcons.add)],
+            children: [
+              Text(AppLocalizations.of(context)!.add),
+              Icon(CupertinoIcons.add)
+            ],
           )),
       body: SafeArea(
         child: Column(
@@ -213,9 +313,9 @@ class HomeScreen extends StatelessWidget {
               height: 110,
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
-                    themeData.colorScheme.primary,
-                    themeData.colorScheme.primaryContainer,
-                  ])),
+                themeData.colorScheme.primary,
+                themeData.colorScheme.primaryContainer,
+              ])),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Column(
@@ -223,12 +323,10 @@ class HomeScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          AppLocalizations.of(context)!.list,
-                          style: themeData.textTheme.headline6!
-                              .apply(color: themeData.colorScheme.onPrimary,)
-
-                        ),
+                        Text(AppLocalizations.of(context)!.list,
+                            style: themeData.textTheme.headline6!.apply(
+                              color: themeData.colorScheme.onPrimary,
+                            )),
                       ],
                     ),
                     const SizedBox(
@@ -252,7 +350,7 @@ class HomeScreen extends StatelessWidget {
                           searchKeywordNotifier.value = controller.text;
                         },
                         controller: controller,
-                        decoration:  InputDecoration(
+                        decoration: InputDecoration(
                           prefixIcon: Icon(CupertinoIcons.search),
                           label: Text(AppLocalizations.of(context)!.search),
                         ),
@@ -286,11 +384,11 @@ class HomeScreen extends StatelessWidget {
                               if (index == 0) {
                                 return Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           AppLocalizations.of(context)!.today,
@@ -304,7 +402,7 @@ class HomeScreen extends StatelessWidget {
                                           decoration: BoxDecoration(
                                               color: primaryColor,
                                               borderRadius:
-                                              BorderRadius.circular(1.5)),
+                                                  BorderRadius.circular(1.5)),
                                         )
                                       ],
                                     ),
@@ -316,8 +414,9 @@ class HomeScreen extends StatelessWidget {
                                         box.clear();
                                       },
                                       child: Row(
-                                        children:  [
-                                          Text(AppLocalizations.of(context)!.delete),
+                                        children: [
+                                          Text(AppLocalizations.of(context)!
+                                              .delete),
                                           SizedBox(
                                             width: 4,
                                           ),
@@ -482,14 +581,14 @@ class MyCheckBox extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border:
-            !value ? Border.all(color: secondaryTextColor, width: 2) : null,
+                !value ? Border.all(color: secondaryTextColor, width: 2) : null,
             color: value ? primaryColor : null),
         child: value
             ? Icon(
-          CupertinoIcons.check_mark,
-          size: 16,
-          color: themeData.colorScheme.onPrimary,
-        )
+                CupertinoIcons.check_mark,
+                size: 16,
+                color: themeData.colorScheme.onPrimary,
+              )
             : null,
       ),
     );
